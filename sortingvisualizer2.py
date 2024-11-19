@@ -3,7 +3,7 @@ import tkinter as tk
 import random
 import time
 
-# Function to swap two bars that will be animated
+#swap 2 bars
 def swap(pos_0, pos_1):
     bar11, _, bar12, _ = canvas.coords(pos_0)
     bar21, _, bar22, _ = canvas.coords(pos_1)
@@ -12,7 +12,6 @@ def swap(pos_0, pos_1):
 
 worker = None 
 
-# Insertion Sort
 def _insertion_sort():
     global barList
     global lengthList
@@ -30,7 +29,6 @@ def _insertion_sort():
         barList[pos] = cursorBar
         swap(barList[pos], cursorBar)
 
-# Bubble Sort
 def _bubble_sort():
     global barList
     global lengthList
@@ -42,7 +40,6 @@ def _bubble_sort():
                 swap(barList[j + 1], barList[j])
                 yield        
 
-# Selection Sort
 def _selection_sort():
     global barList    
     global lengthList
@@ -57,7 +54,6 @@ def _selection_sort():
         swap(barList[min], barList[i])
         yield
 
-# Triggering Functions
 def insertion_sort():     
     global worker
     worker = _insertion_sort()
@@ -76,7 +72,7 @@ def bubble_sort():
     animate()    
     time_complexity_label.config(text="Time Complexity: O(n^2)")
 
-# Animation Function
+#animation
 def animate():      
     global worker
     if worker is not None:
@@ -88,7 +84,7 @@ def animate():
         finally:
             window.after_cancel(animate) 
 
-# Generator function for generating data
+#Generator function for generating data
 def generate():
     global barList
     global lengthList
@@ -98,7 +94,7 @@ def generate():
     barList = []
     lengthList = []
 
-    # Creating a rectangle with muted pastel colors for bars
+    #create rectangle
     for bar in range(0, (number)):
         randomY = random.randint(1, 360)
         bar = canvas.create_rectangle(barstart, randomY, barend, 365, fill='#82CFFD', width=2)
@@ -106,47 +102,46 @@ def generate():
         barstart += 10
         barend += 10
 
-    # Getting length of the bar and appending into length list
+    #bar length getting
     for bar in barList:
         bar = canvas.coords(bar)
         length = bar[3] - bar[1]
         lengthList.append(length)
 
-    # Maximum is colored Red
-    # Minimum is colored Black
+    #Max length bar is red
+    #Min length bar is black
     for i in range(len(lengthList)-1):
         if lengthList[i] == min(lengthList):
-            canvas.itemconfig(barList[i], fill='#FF6F61')  # Soft red for minimum
+            canvas.itemconfig(barList[i], fill='#FF6F61')
         elif lengthList[i] == max(lengthList):
-            canvas.itemconfig(barList[i], fill='#333')  # Dark gray for maximum
+            canvas.itemconfig(barList[i], fill='#333')
 
-# Accept number of inputs
+#Number of Bars input
 def Accept_value():
    global number
    t1 = int(a.get())
    number = t1
-   input_frame.pack_forget()  # Hide input screen
-   sorting_ui()  # Go to sorting screen after input
-   generate()  # Generate bars after accepting input
+   input_frame.pack_forget() 
+   sorting_ui()
+   generate()
 
-# Modern UI design
+#UI design using tkinker
 def create_ui():
-    # Main window
     window = tk.Tk()
     window.title('Sorting Visualizer')
     window.geometry('1000x500')
-    window.configure(bg='#F0F0F0')  # Light background color
-    window.state('zoomed')  # Windowed full-screen mode
+    window.configure(bg='#F0F0F0')
+    window.state('zoomed')
 
     return window
 
-# Input window UI design
+# Input window UI
 def input_ui():
     global a, input_frame
     input_frame = Frame(window, bg='#F0F0F0')
     input_frame.pack(fill=BOTH, expand=True)
 
-    # Add the name, registration number, and university details
+    #Adding details
     name_label = Label(input_frame, text="Gautam Kakkar", font=("Arial", 12), fg='#333', bg='#F0F0F0')
     name_label.pack(pady=5)
 
@@ -156,11 +151,9 @@ def input_ui():
     uni_label = Label(input_frame, text="Manipal University Jaipur", font=("Arial", 12), fg='#333', bg='#F0F0F0')
     uni_label.pack(pady=5)
 
-    # Add the new label for the mini project
     project_label = Label(input_frame, text="OOPS using Python (CS2122) Mini Project", font=("Arial", 12), fg='#333', bg='#F0F0F0')
     project_label.pack(pady=5)
 
-    # Labels with your details
     label = Label(input_frame, text="Enter Number of Bars:", font=("Arial", 14), fg='#333', bg='#F0F0F0')
     label.pack(pady=20)
 
@@ -179,7 +172,7 @@ def sorting_ui():
     canvas = tk.Canvas(window, width=1000, height=400, bg="#E8E8E8", bd=0, highlightthickness=0)
     canvas.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
 
-    # Buttons with modern style
+    #Buttons
     insert = tk.Button(window, text='Insertion Sort', command=insertion_sort, bg="#4CAF50", fg="white", font=("Arial", 12, "bold"), relief="flat")
     insert.grid(row=1, column=0, padx=10, pady=20)
 
@@ -192,23 +185,23 @@ def sorting_ui():
     shuffle = tk.Button(window, text='Shuffle', command=generate, bg="#FFC107", fg="white", font=("Arial", 12, "bold"), relief="flat")
     shuffle.grid(row=1, column=3, padx=10, pady=20)
 
-    # Time Complexity Label
+    #Time Complexity
     time_complexity_label = Label(window, text="Time Complexity: O(n^2)", font=("Arial", 12), fg="#333", bg="#F0F0F0")
     time_complexity_label.grid(row=2, column=0, columnspan=4, pady=10)
 
-    # Reset button
+    #Reset button
     reset_button = Button(window, text="Reset", command=reset, bg="#9E9E9E", fg="white", font=("Arial", 12, "bold"), relief="flat")
     reset_button.grid(row=3, column=3, padx=10, pady=20)
 
-# Reset the screen to initial state without adding another canvas or bar down
+#Reset button
 def reset():
     global worker, barList, lengthList
     worker = None
-    canvas.delete('all')  # Clear all content in the canvas
-    generate()  # Redraw the bars
-    time_complexity_label.config(text="Time Complexity: O(n^2)")  # Reset time complexity label
+    canvas.delete('all')
+    generate()
+    time_complexity_label.config(text="Time Complexity: O(n^2)")
 
-# Main Program Execution
+#Main Program
 window = create_ui()
 input_ui()
 window.mainloop()
